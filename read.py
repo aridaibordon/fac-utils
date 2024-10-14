@@ -82,7 +82,7 @@ def read_tr(path_to_file: str) -> DataFrame:
 
 
 def read_pi(path_to_file: str) -> DataFrame:
-    """Read FAC autoionizationfile"""
+    """Read FAC photoionization and radiative recombination file"""
     HEADER_SIZE = 31
 
     def get_formatted_pi_data(raw_row: list):
