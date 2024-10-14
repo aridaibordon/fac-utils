@@ -77,12 +77,3 @@ def read_tr(path_to_file: str) -> DataFrame:
             data[k].append(sdata[ind])
 
     return DataFrame(data).astype(kdata)
-
-
-def get_ein_dict(tr_df: DataFrame) -> dict:
-    ein_dict = {}
-    for _, tr_row in tr_df.iterrows():
-        upp, low, ein = int(tr_row["upp"]), int(tr_row["low"]), tr_row["ein"]
-        ein_dict[f"{upp:05d}-{low:05d}"] = ein
-
-    return ein_dict
