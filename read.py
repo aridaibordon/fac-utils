@@ -105,8 +105,8 @@ def read_pi(path_to_file: str) -> DataFrame:
         "upp2J": int,
         "deltaE": float,
         "egrid": object,
-        "cross_rr": object,
-        "cross_pi": object,
+        "rr_cross": object,
+        "pi_cross": object,
     }
     data = [get_formatted_pi_data(raw_row) for raw_row in np.reshape(raw_data, (-1, 8))]
 
