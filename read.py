@@ -82,14 +82,14 @@ def read_tr(path_to_file: str) -> DataFrame:
 
 
 def read_pi(path_to_file: str) -> DataFrame:
-    """Read FAC photoionization and radiative recombination file"""
+    """Read FAC photoionization and radiative recombination file."""
     HEADER_SIZE = 31
 
     def get_formatted_pi_data(raw_row: list):
         low, low2J, upp, upp2J, deltaE, _ = raw_row[0].split()
         egrid, cross_rr, cross_pi, _ = np.asarray(
             [item.split() for item in raw_row[2:]]
-        ).T
+        ).T.astype(float)
 
         return low, low2J, upp, upp2J, deltaE, egrid, cross_rr, cross_pi
 
