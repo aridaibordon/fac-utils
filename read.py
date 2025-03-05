@@ -83,8 +83,6 @@ def read_tr(path_to_file: str) -> DataFrame:
 
 def read_pi(path_to_file: str) -> DataFrame:
     """Read FAC photoionization and radiative recombination file."""
-    HEADER_SIZE = 31
-
     def get_formatted_pi_data(raw_row: list):
         low, low2J, upp, upp2J, deltaE, _ = raw_row[0].split()
         egrid, cross_rr, cross_pi, _ = np.asarray(
@@ -94,7 +92,20 @@ def read_pi(path_to_file: str) -> DataFrame:
         return low, low2J, upp, upp2J, deltaE, egrid, cross_rr, cross_pi
 
     with open(path_to_file, "r") as f:
-        [f.readline() for _ in range(HEADER_SIZE)]
+        header_size = 0
+        while True:
+            line = f.readline()
+            header_size += 1
+
+            if not line.split():
+                continue
+
+            if line.split()[0] == "NUSR":
+                nusr = int(line.split()[-1])
+                header_size += nusr
+
+                [f.readline() for _ in range(nusr)]
+                break
 
         raw_data = [line.strip() for line in f.readlines()]
 
@@ -108,6 +119,9 @@ def read_pi(path_to_file: str) -> DataFrame:
         "rr_cross": object,
         "pi_cross": object,
     }
-    data = [get_formatted_pi_data(raw_row) for raw_row in np.reshape(raw_data, (-1, 8))]
+    data = [
+        get_formatted_pi_data(raw_row)
+        for raw_row in np.reshape(raw_data, (-1, nusr + 2))
+    ]
 
     return DataFrame(data, columns=kdata.keys()).astype(kdata)
